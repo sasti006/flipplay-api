@@ -1,66 +1,216 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# FlipPlay API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+REST API untuk aplikasi **FlipPlay**, dikembangkan menggunakan Laravel sebagai bagian dari Praktikum Web Modul 4.
 
-## About Laravel
+Proyek ini merupakan pengembangan dari simulasi FlipPlay berbasis terminal menjadi aplikasi berbasis REST API yang dapat mengelola data media dan koleksi media pengguna.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Teknologi yang Digunakan
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- PHP 8.2
+- Laravel 12
+- MySQL
+- Composer
+- Postman untuk pengujian API
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Fitur Utama
 
-## Learning Laravel
+1. CRUD data media (Create, Read, Update, Delete).
+2. Pencarian media berdasarkan judul.
+3. Pengelolaan data pengguna.
+4. Relasi many-to-many antara pengguna dan media.
+5. Menambahkan media ke koleksi pengguna.
+6. Melihat koleksi media pengguna.
+7. Menghapus media dari koleksi pengguna.
+8. Validasi input menggunakan Form Request.
+9. Format respons API menggunakan API Resources.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Struktur Relasi Database
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+Proyek ini menggunakan relasi **many-to-many** antara tabel `users` dan `media`, dengan tabel pivot `media_user`.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- Satu pengguna dapat memiliki banyak media dalam koleksinya.
+- Satu media dapat dimiliki oleh banyak pengguna.
+- Penghapusan data pengguna atau media akan menghapus relasi terkait pada tabel pivot.
 
-## Laravel Sponsors
+## Persiapan dan Instalasi
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### 1. Clone Repository
 
-### Premium Partners
+```bash
+git clone https://github.com/sasti006/flipplay-api.git
+cd flipplay-api
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+### 2. Install Dependency
 
-## Contributing
+```bash
+composer install
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 3. Konfigurasi Environment
 
-## Code of Conduct
+Salin file `.env.example` menjadi `.env`.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Pada Windows PowerShell:
 
-## Security Vulnerabilities
+```powershell
+Copy-Item .env.example .env
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Kemudian buat application key:
 
-## License
+```bash
+php artisan key:generate
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### 4. Konfigurasi Database MySQL
+
+Buat database dengan nama `flipplay` melalui phpMyAdmin.
+
+Sesuaikan konfigurasi berikut pada file `.env`:
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=flipplay
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+Sesuaikan username dan password jika konfigurasi MySQL berbeda.
+
+### 5. Jalankan Migration
+
+```bash
+php artisan migrate
+```
+
+### 6. Jalankan Server Laravel
+
+```bash
+php artisan serve
+```
+
+API dapat diakses melalui:
+
+```text
+http://127.0.0.1:8000
+```
+
+## Daftar Endpoint API
+
+Semua endpoint menggunakan prefix `/api`.
+
+### A. Media
+
+| Method | Endpoint | Fungsi |
+|---|---|---|
+| GET | `/api/media` | Menampilkan semua media |
+| GET | `/api/media/{medium}` | Menampilkan detail media |
+| POST | `/api/media` | Menambahkan media baru |
+| PUT/PATCH | `/api/media/{medium}` | Mengubah data media |
+| DELETE | `/api/media/{medium}` | Menghapus media |
+| GET | `/api/media-search?search=judul` | Mencari media berdasarkan judul |
+
+Pencarian juga dapat dilakukan melalui `/api/media?search=judul`.
+
+Contoh JSON untuk menambahkan media:
+
+```json
+{
+    "title": "Avengers Endgame",
+    "type": "Movie",
+    "genre": "Action",
+    "release_year": 2019,
+    "description": "Film superhero Marvel."
+}
+```
+
+### B. User
+
+| Method | Endpoint | Fungsi |
+|---|---|---|
+| GET | `/api/users` | Menampilkan semua pengguna |
+| GET | `/api/users/{user}` | Menampilkan detail pengguna |
+| POST | `/api/users` | Menambahkan pengguna baru |
+
+Contoh JSON untuk menambahkan pengguna:
+
+```json
+{
+    "name": "Sasti",
+    "email": "sasti@example.com",
+    "password": "password123"
+}
+```
+
+### C. Koleksi Media Pengguna
+
+| Method | Endpoint | Fungsi |
+|---|---|---|
+| POST | `/api/users/{user}/collection/{media}` | Menambahkan media ke koleksi |
+| GET | `/api/users/{user}/collection` | Melihat koleksi media pengguna |
+| DELETE | `/api/users/{user}/collection/{media}` | Menghapus media dari koleksi |
+
+Contoh:
+
+```text
+POST /api/users/1/collection/1
+```
+
+Endpoint tersebut menambahkan media dengan ID 1 ke koleksi pengguna dengan ID 1.
+
+## Validasi dan Penanganan Error
+
+API menerapkan validasi untuk memastikan data yang dikirim sesuai ketentuan.
+
+Beberapa contoh penanganan error:
+
+| Status Code | Keterangan |
+|---|---|
+| 201 | Data berhasil dibuat |
+| 404 | Data tidak ditemukan |
+| 409 | Media sudah ada di koleksi pengguna |
+| 422 | Data tidak memenuhi validasi |
+
+Validasi media mencakup:
+- Judul wajib diisi.
+- Judul media harus unik.
+- Jenis media wajib diisi.
+- Genre wajib diisi.
+- Tahun rilis harus berupa angka dan berada dalam rentang yang ditentukan.
+
+## Pengujian API
+
+Pengujian endpoint dilakukan menggunakan Postman dengan header:
+
+```text
+Accept: application/json
+Content-Type: application/json
+```
+
+Pengujian mencakup:
+
+1. Menambahkan pengguna baru.
+2. Menambahkan media baru.
+3. Menampilkan seluruh media.
+4. Menampilkan detail media.
+5. Mencari media berdasarkan judul.
+6. Mengubah data media.
+7. Menghapus media.
+8. Menambahkan media ke koleksi pengguna.
+9. Menampilkan koleksi pengguna.
+10. Menghapus media dari koleksi.
+11. Menguji validasi judul kosong dan judul duplikat.
+12. Menguji penambahan media yang sudah ada di koleksi.
+13. Menguji penghapusan media yang tidak ada di koleksi.
+14. Menguji akses ke data yang tidak ditemukan.
+
+## Repository
+
+GitHub: https://github.com/sasti006/flipplay-api
+
+---
+
+**FlipPlay API — Praktikum Web Modul 4**
